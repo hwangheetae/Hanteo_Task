@@ -1,4 +1,5 @@
 import React from "react";
+import Header from "./component/Header";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -6,12 +7,9 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <div className="w-[425px] h-[900px] mx-auto border border-gray-300 shadow-lg flex flex-col">
-      <header className="bg-blue-500 text-white text-center py-2">
-        <h1 className="text-xl font-bold">Header</h1>
-      </header>
-
-      <main className="flex-1 overflow-y-auto p-4 bg-gray-100">{children}</main>
+    <div className="min-h-screen flex flex-col mx-auto border border-gray-300 shadow-lg max-w-[425px]">
+      <Header />
+      <main className="flex-1 overflow-y-auto  bg-gray-100">{children}</main>
 
       <footer className="bg-gray-800 text-white text-center py-4">
         <p className="text-sm">Footer</p>
