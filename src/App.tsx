@@ -11,6 +11,10 @@ import ListContent from "./component/ListContent";
 function App() {
   const categories = ["차트", "Whook", "이벤트", "뉴스", "스토어", "충전소"];
   const [currentCategoryIndex, setCurrentCategoryIndex] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [slideDirection, setSlideDirection] = useState<"left" | "right" | null>(
+    null
+  );
 
   const images = [
     {
@@ -42,11 +46,28 @@ function App() {
     description: `Description for item ${index + 1}`,
   }));
 
+  const handleCategoryClick = (index: number) => {
+    if (index !== currentCategoryIndex) {
+      setSlideDirection(index > currentCategoryIndex ? "left" : "right");
+      triggerAnimation(() => setCurrentCategoryIndex(index));
+    }
+  };
+
+  const triggerAnimation = (callback: () => void) => {
+    setIsAnimating(true);
+    setTimeout(() => {
+      callback();
+      setIsAnimating(false);
+    }, 300);
+  };
+
   const handleSwipe = (direction: string) => {
     if (direction === "left" && currentCategoryIndex < categories.length - 1) {
-      setCurrentCategoryIndex((prev: number) => prev + 1);
+      setSlideDirection("left"); // 슬라이드 방향 설정
+      triggerAnimation(() => setCurrentCategoryIndex((prev) => prev + 1));
     } else if (direction === "right" && currentCategoryIndex > 0) {
-      setCurrentCategoryIndex((prev: number) => prev - 1);
+      setSlideDirection("right"); // 슬라이드 방향 설정
+      triggerAnimation(() => setCurrentCategoryIndex((prev) => prev - 1));
     }
   };
 
@@ -54,10 +75,6 @@ function App() {
     onSwipedLeft: () => handleSwipe("left"),
     onSwipedRight: () => handleSwipe("right"),
   });
-
-  const handleCategoryClick = (index: number) => {
-    setCurrentCategoryIndex(index);
-  };
 
   return (
     <Layout>
@@ -68,11 +85,21 @@ function App() {
           onCategoryClick={handleCategoryClick}
         />
         <Carousel images={images} interval={3000} />
-        <div {...handlers}>
-          <ListContent
-            curationTitle={"콘텐츠 큐레이션 제목"}
-            initialItems={initialItems}
-          />
+        <div {...handlers} className="relative overflow-hidden">
+          <div
+            className={`transition-transform duration-300 ${
+              isAnimating
+                ? slideDirection === "left"
+                  ? "transform -translate-x-full opacity-50"
+                  : "transform translate-x-full opacity-50"
+                : "opacity-100"
+            }`}
+          >
+            <ListContent
+              curationTitle={categories[currentCategoryIndex]}
+              initialItems={initialItems}
+            />
+          </div>
         </div>
       </div>
     </Layout>
