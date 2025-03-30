@@ -6,45 +6,18 @@ import Layout from "./layout";
 import Header from "./component/Header";
 import Carousel from "./component/Carousel";
 import ListContent from "./component/ListContent";
+import { carouselImages } from "./dummy_data/carousel_images";
+
+const categories = ["차트", "Whook", "이벤트", "뉴스", "스토어", "충전소"];
 
 function App() {
-  const categories = ["차트", "Whook", "이벤트", "뉴스", "스토어", "충전소"];
   const [currentCategoryIndex, setCurrentCategoryIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [slideDirection, setSlideDirection] = useState<"left" | "right" | null>(
     null
   );
 
-  const images = [
-    {
-      src: "https://placehold.co/400x200",
-      link: "https://example.com/1",
-    },
-    {
-      src: "https://placehold.co/400x200",
-      link: "https://example.com/2",
-    },
-    {
-      src: "https://placehold.co/400x200",
-      link: "https://example.com/3",
-    },
-    {
-      src: "https://placehold.co/400x200",
-      link: "https://example.com/4",
-    },
-    {
-      src: "https://placehold.co/400x200",
-      link: "https://example.com/5",
-    },
-  ];
-
-  const handleCategoryClick = (index: number) => {
-    if (index !== currentCategoryIndex) {
-      setSlideDirection(index > currentCategoryIndex ? "left" : "right");
-      triggerAnimation(() => setCurrentCategoryIndex(index));
-    }
-  };
-
+  // 카테고리 스와이프 애니메이션 핸들러
   const triggerAnimation = (callback: () => void) => {
     setIsAnimating(true);
     setTimeout(() => {
@@ -53,20 +26,40 @@ function App() {
     }, 300);
   };
 
-  const handleSwipe = (direction: string) => {
-    if (direction === "left" && currentCategoryIndex < categories.length - 1) {
-      setSlideDirection("left");
-      triggerAnimation(() => setCurrentCategoryIndex((prev) => prev + 1));
-    } else if (direction === "right" && currentCategoryIndex > 0) {
-      setSlideDirection("right");
-      triggerAnimation(() => setCurrentCategoryIndex((prev) => prev - 1));
+  const changeCategory = (newIndex: number, direction: "left" | "right") => {
+    setSlideDirection(direction);
+    triggerAnimation(() => setCurrentCategoryIndex(newIndex));
+  };
+
+  const handleCategoryClick = (index: number) => {
+    if (index !== currentCategoryIndex) {
+      const direction = index > currentCategoryIndex ? "left" : "right";
+      changeCategory(index, direction);
     }
   };
 
-  const handlers = useSwipeable({
+  const handleSwipe = (direction: string) => {
+    if (direction === "left" && currentCategoryIndex < categories.length - 1) {
+      changeCategory(currentCategoryIndex + 1, "left");
+    } else if (direction === "right" && currentCategoryIndex > 0) {
+      changeCategory(currentCategoryIndex - 1, "right");
+    }
+  };
+
+  const swipeHandlers = useSwipeable({
     onSwipedLeft: () => handleSwipe("left"),
     onSwipedRight: () => handleSwipe("right"),
   });
+
+  // 카테고리 스와이프 애니메이션
+  const getAnimationClass = () => {
+    if (isAnimating) {
+      return slideDirection === "left"
+        ? "transform -translate-x-full opacity-50"
+        : "transform translate-x-full opacity-50";
+    }
+    return "opacity-100";
+  };
 
   return (
     <Layout>
@@ -76,16 +69,12 @@ function App() {
           currentCategoryIndex={currentCategoryIndex}
           onCategoryClick={handleCategoryClick}
         />
-        <Carousel images={images} interval={3000} />
-        <div {...handlers} className="relative overflow-hidden">
+        <Carousel images={carouselImages} interval={3000} />
+
+        {/* 스와이프 이벤트 핸들러 */}
+        <div {...swipeHandlers} className="relative overflow-hidden">
           <div
-            className={`transition-transform duration-300 ${
-              isAnimating
-                ? slideDirection === "left"
-                  ? "transform -translate-x-full opacity-50"
-                  : "transform translate-x-full opacity-50"
-                : "opacity-100"
-            }`}
+            className={`transition-transform duration-300 ${getAnimationClass()}`}
           >
             <ListContent
               curationTitle={categories[currentCategoryIndex]}
