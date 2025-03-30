@@ -1,4 +1,3 @@
-// import "./App.css";
 import { useState } from "react";
 
 import { useSwipeable } from "react-swipeable";
@@ -18,33 +17,26 @@ function App() {
 
   const images = [
     {
-      src: "https://via.placeholder.com/400x200",
+      src: "https://placehold.co/400x200",
       link: "https://example.com/1",
     },
     {
-      src: "https://via.placeholder.com/400x200",
+      src: "https://placehold.co/400x200",
       link: "https://example.com/2",
     },
     {
-      src: "https://via.placeholder.com/400x200",
+      src: "https://placehold.co/400x200",
       link: "https://example.com/3",
     },
     {
-      src: "https://via.placeholder.com/400x200",
+      src: "https://placehold.co/400x200",
       link: "https://example.com/4",
     },
     {
-      src: "https://via.placeholder.com/400x200",
+      src: "https://placehold.co/400x200",
       link: "https://example.com/5",
     },
   ];
-
-  const initialItems = Array.from({ length: 10 }, (_, index) => ({
-    id: `${index + 1}`,
-    title: `Item ${index + 1}`,
-    imageUrl: "https://via.placeholder.com/100",
-    description: `Description for item ${index + 1}`,
-  }));
 
   const handleCategoryClick = (index: number) => {
     if (index !== currentCategoryIndex) {
@@ -63,10 +55,10 @@ function App() {
 
   const handleSwipe = (direction: string) => {
     if (direction === "left" && currentCategoryIndex < categories.length - 1) {
-      setSlideDirection("left"); // 슬라이드 방향 설정
+      setSlideDirection("left");
       triggerAnimation(() => setCurrentCategoryIndex((prev) => prev + 1));
     } else if (direction === "right" && currentCategoryIndex > 0) {
-      setSlideDirection("right"); // 슬라이드 방향 설정
+      setSlideDirection("right");
       triggerAnimation(() => setCurrentCategoryIndex((prev) => prev - 1));
     }
   };
@@ -97,7 +89,7 @@ function App() {
           >
             <ListContent
               curationTitle={categories[currentCategoryIndex]}
-              initialItems={initialItems}
+              category={categories[currentCategoryIndex]}
             />
           </div>
         </div>

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { v4 as uuidv4 } from "uuid";
 
 interface Item {
   id: string;
@@ -10,28 +9,59 @@ interface Item {
 
 interface ListContentProps {
   curationTitle: string;
-  initialItems: Item[];
+  category: string;
 }
 
 const ListContent: React.FC<ListContentProps> = ({
   curationTitle,
-  initialItems,
+  category,
 }) => {
-  const [items, setItems] = useState<Item[]>(initialItems);
+  const [items, setItems] = useState<Item[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const observerRef = useRef<HTMLDivElement | null>(null);
 
-  const fetchMoreItems = useCallback(() => {
-    const newItems = Array.from({ length: 10 }, () => {
-      return {
-        id: uuidv4(), // UUID로 고유한 ID 생성
-        title: `Item`,
-        imageUrl: "https://via.placeholder.com/100",
-        description: `Description`,
-      };
-    });
-    return newItems;
-  }, []);
+  //초기 데이터 패칭
+  // api 가 없는 상태에서 더미 데이터로 대체
+  const fetchItemsByCategory = async (category: string) => {
+    setIsLoading(true);
+    try {
+      // const response = await fetch(``);
+      // const data = await response.json();
+      const dummyData = Array.from({ length: 10 }, (_, index) => ({
+        id: `${category}-${index + 1}`,
+        title: `Item ${index + 1} in ${category}`,
+        imageUrl: "https://placehold.co/100",
+        description: `Description for item ${index + 1} in ${category}`,
+      }));
+      setItems(dummyData);
+    } catch (error) {
+      console.error("Error fetching items:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchMoreItems = useCallback(
+    (category: string) => {
+      const startIndex = items.length;
+      const newItems = Array.from({ length: 10 }, (_, index) => {
+        return {
+          id: `${category}-${startIndex + index + 1}`,
+          title: `Item ${startIndex + index + 1} in ${category} by 무한스크롤`,
+          imageUrl: "https://placehold.co/100",
+          description: `Description for item ${
+            startIndex + index + 1
+          } in ${category}`,
+        };
+      });
+      return newItems;
+    },
+    [items]
+  );
+
+  useEffect(() => {
+    fetchItemsByCategory(category);
+  }, [category]);
 
   const handleObserver = useCallback(
     (entries: IntersectionObserverEntry[]) => {
@@ -39,12 +69,12 @@ const ListContent: React.FC<ListContentProps> = ({
       if (target.isIntersecting && !isLoading) {
         setIsLoading(true);
         setTimeout(() => {
-          setItems((prevItems) => [...prevItems, ...fetchMoreItems()]);
+          setItems((prevItems) => [...prevItems, ...fetchMoreItems(category)]);
           setIsLoading(false);
         }, 1000);
       }
     },
-    [isLoading, fetchMoreItems]
+    [isLoading, fetchMoreItems, category]
   );
 
   useEffect(() => {
@@ -72,12 +102,12 @@ const ListContent: React.FC<ListContentProps> = ({
         <h3 className="text-lg font-bold">{curationTitle}</h3>
       </div>
       <div
-        className="overflow-y-auto"
+        className="overflow-y-auto scrollbar-hidden"
         style={{
           height: "calc(100vh - 340px)",
         }}
       >
-        <div className="space-y-4 px-4 py-2">
+        <div className="space-y-4 px-4 py-2 ">
           {items.map((item) => (
             <div
               key={item.id}
