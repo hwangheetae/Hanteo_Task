@@ -19,6 +19,7 @@ const ListContent: React.FC<ListContentProps> = ({
   const [items, setItems] = useState<Item[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const observerRef = useRef<HTMLDivElement | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
   //초기 데이터 패칭
   // api 가 없는 상태에서 더미 데이터로 대체
@@ -40,10 +41,6 @@ const ListContent: React.FC<ListContentProps> = ({
       setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-    fetchItemsByCategory(category);
-  }, [category]);
 
   //무한스크롤
   const fetchMoreItems = useCallback(
@@ -79,6 +76,13 @@ const ListContent: React.FC<ListContentProps> = ({
   );
 
   useEffect(() => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTop = 0;
+    }
+    fetchItemsByCategory(category);
+  }, [category]);
+
+  useEffect(() => {
     const node = observerRef.current;
     const observer = new IntersectionObserver(handleObserver, {
       root: null,
@@ -103,6 +107,7 @@ const ListContent: React.FC<ListContentProps> = ({
         <h3 className="text-lg font-bold">{curationTitle}</h3>
       </div>
       <div
+        ref={scrollContainerRef}
         className="overflow-y-auto scrollbar-hidden"
         style={{
           height: "calc(100vh - 340px)",
