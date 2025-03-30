@@ -67,8 +67,8 @@ const ListContent: React.FC<ListContentProps> = ({
   }, [handleObserver]);
 
   return (
-    <div className="w-full max-w-md mx-auto border rounded-lg">
-      <div className="sticky top-0 bg-white z-10 px-4 py-2 border-b">
+    <div className="w-full max-w-md mx-auto  rounded-lg">
+      <div className="sticky top-0  z-10 px-4 py-2 ">
         <h3 className="text-lg font-bold">{curationTitle}</h3>
       </div>
       <div
@@ -81,12 +81,12 @@ const ListContent: React.FC<ListContentProps> = ({
           {items.map((item) => (
             <div
               key={item.id}
-              className="flex items-center p-4 bg-white rounded-lg shadow-md border"
+              className="flex items-center p-4 bg-white rounded-lg shadow-md "
             >
               <img
                 src={item.imageUrl}
                 alt={item.title}
-                className="w-16 h-16 object-cover rounded-lg mr-4 border bg-gray-500"
+                className="w-16 h-16 object-cover rounded-lg mr-4  bg-gray-500"
               />
               <div className="flex-1">
                 <h4 className="text-sm font-bold mb-1">{item.title}</h4>
