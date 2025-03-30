@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 interface Item {
   id: string;
@@ -29,7 +30,7 @@ const ListContent: React.FC<ListContentProps> = ({
       // const response = await fetch(``);
       // const data = await response.json();
       const dummyData = Array.from({ length: 10 }, (_, index) => ({
-        id: `${category}-${index + 1}`,
+        id: `${category}-${uuidv4()}`,
         title: `Item ${index + 1} in ${category}`,
         imageUrl: "https://placehold.co/100",
         description: `Description for item ${index + 1} in ${category}`,
@@ -48,7 +49,7 @@ const ListContent: React.FC<ListContentProps> = ({
       const startIndex = items.length;
       const newItems = Array.from({ length: 10 }, (_, index) => {
         return {
-          id: `${category}-${startIndex + index + 1}`,
+          id: `${category}-${uuidv4()}`,
           title: `Item ${startIndex + index + 1} in ${category} by 무한스크롤`,
           imageUrl: "https://placehold.co/100",
           description: `Description for item ${
