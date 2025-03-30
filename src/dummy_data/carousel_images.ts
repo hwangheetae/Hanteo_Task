@@ -15,8 +15,4 @@ export const carouselImages = [
     src: "https://placehold.co/400x200",
     link: "https://example.com/4",
   },
-  {
-    src: "https://placehold.co/400x200",
-    link: "https://example.com/5",
-  },
 ];

@@ -10,17 +10,18 @@ const Carousel = ({ images, interval = 3000 }: CarouselProps) => {
   const startX = useRef(0);
   const endX = useRef(0);
 
-  const handlePrev = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? images.length - 1 : prevIndex - 1
-    );
-  };
+  const changeSlide = useCallback(
+    (direction: "prev" | "next") => {
+      setCurrentIndex((prevIndex) => {
+        if (direction === "next") {
+          return prevIndex === images.length - 1 ? 0 : prevIndex + 1;
+        }
 
-  const handleNext = useCallback(() => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === images.length - 1 ? 0 : prevIndex + 1
-    );
-  }, [images.length]);
+        return prevIndex === 0 ? images.length - 1 : prevIndex - 1;
+      });
+    },
+    [images.length]
+  );
 
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
     startX.current = e.touches[0].clientX;
@@ -33,19 +34,19 @@ const Carousel = ({ images, interval = 3000 }: CarouselProps) => {
   const handleTouchEnd = () => {
     const deltaX = endX.current - startX.current;
     if (deltaX > 50) {
-      handlePrev();
+      changeSlide("prev");
     } else if (deltaX < -50) {
-      handleNext();
+      changeSlide("next");
     }
   };
 
   useEffect(() => {
     const slideInterval = setInterval(() => {
-      handleNext();
+      changeSlide("next");
     }, interval);
 
     return () => clearInterval(slideInterval);
-  }, [handleNext, interval]);
+  }, [changeSlide, interval]);
 
   return (
     <div
@@ -75,6 +76,8 @@ const Carousel = ({ images, interval = 3000 }: CarouselProps) => {
           </a>
         ))}
       </div>
+
+      {/* 캐러셀 이미지 인디케이터 */}
       <div className=" justify-center transform flex space-x-2 mt-2">
         {images.map((_, index) => (
           <div

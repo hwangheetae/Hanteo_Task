@@ -41,6 +41,11 @@ const ListContent: React.FC<ListContentProps> = ({
     }
   };
 
+  useEffect(() => {
+    fetchItemsByCategory(category);
+  }, [category]);
+
+  //무한스크롤
   const fetchMoreItems = useCallback(
     (category: string) => {
       const startIndex = items.length;
@@ -58,10 +63,6 @@ const ListContent: React.FC<ListContentProps> = ({
     },
     [items]
   );
-
-  useEffect(() => {
-    fetchItemsByCategory(category);
-  }, [category]);
 
   const handleObserver = useCallback(
     (entries: IntersectionObserverEntry[]) => {
