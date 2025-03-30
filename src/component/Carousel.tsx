@@ -49,7 +49,7 @@ const Carousel = ({ images, interval = 3000 }: CarouselProps) => {
 
   return (
     <div
-      className="relative w-full max-w-lg mx-auto overflow-hidden m-2"
+      className="relative w-full max-w-lg mx-auto overflow-hidden m-2 bg-white p-2"
       style={{ paddingLeft: "10%", paddingRight: "10%" }}
     >
       <div

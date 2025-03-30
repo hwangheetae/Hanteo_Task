@@ -1,7 +1,8 @@
 // import "./App.css";
-import Carousel from "./component/Carousel";
 import Layout from "./layout";
 
+import Carousel from "./component/Carousel";
+import ListContent from "./component/ListContent";
 function App() {
   const images = [
     {
@@ -26,12 +27,21 @@ function App() {
     },
   ];
 
+  const initialItems = Array.from({ length: 10 }, (_, index) => ({
+    id: `${index + 1}`,
+    title: `Item ${index + 1}`,
+    imageUrl: "https://via.placeholder.com/100",
+    description: `Description for item ${index + 1}`,
+  }));
+
   return (
     <Layout>
       <div>
         <Carousel images={images} interval={3000} />
-        <h2 className="text-lg font-semibold">Main Content</h2>
-        <p className="text-gray-700">This is the main content area.</p>
+        <ListContent
+          curationTitle={"콘텐츠 큐레이션 제목"}
+          initialItems={initialItems}
+        />
       </div>
     </Layout>
   );
