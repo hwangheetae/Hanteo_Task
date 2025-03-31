@@ -58,7 +58,7 @@ npm install
 ### 2. 개발 서버 실행
 
 ```bash
-npm start
+npm run dev
 ```
 
 ### 3. 빌드
