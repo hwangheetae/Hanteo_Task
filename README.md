@@ -1,54 +1,78 @@
-# React + TypeScript + Vite
+# Hanteo Task
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+이 프로젝트는 React를 사용하여 구현된 웹 애플리케이션으로, 카테고리 전환, 무한 스크롤, 캐러셀, 스와이프 기능 등을 포함합니다.
 
-Currently, two official plugins are available:
+스크롤바를 숨김 처리하여 모바일 환경에서 터치 슬라이드로 스와이프 가능합니다.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 주요 기능
 
-## Expanding the ESLint configuration
+### 1. **카테고리 전환**
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- 상단의 카테고리 탭을 클릭하거나 스와이프하여 카테고리를 전환할 수 있습니다.
+- 카테고리 전환 시 애니메이션 효과가 적용됩니다.
+- 전환된 카테고리에 따라 데이터를 동적으로 로드합니다.
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### 2. **무한 스크롤**
+
+- 각 카테고리의 콘텐츠는 무한 스크롤을 지원합니다.
+- Intersection Observer를 사용하여 스크롤이 하단에 도달하면 추가 데이터를 로드합니다.
+- 카테고리가 변경될 때 스크롤 위치가 초기화되며, 새로운 데이터를 로드합니다.
+
+### 3. **캐러셀 (Carousel)**
+
+- 이미지 슬라이더를 통해 다양한 이미지를 표시합니다.
+- 자동 슬라이드 기능이 포함되어 있으며, 터치 이벤트를 통해 슬라이드를 제어할 수 있습니다.
+- 슬라이드 전환 시 부드러운 애니메이션 효과가 적용됩니다.
+
+### 4. **스와이프 기능**
+
+- `react-swipeable` 라이브러리를 사용하여 좌우 스와이프를 통해 카테고리를 전환할 수 있습니다.
+- 스와이프 방향에 따라 애니메이션 효과가 다르게 적용됩니다.
+
+---
+
+## 프로젝트 구조
+
+```
+src/
+├── component/
+│   ├── Carousel.tsx          # 캐러셀 컴포넌트
+│   ├── Header.tsx            # 헤더 컴포넌트
+│   ├── Footer.tsx            # 푸터 컴포넌트
+│   ├── ListContent.tsx       # 카테고리별 콘텐츠 컴포넌트
+├── layout.tsx                # 레이아웃 컴포넌트
+├── App.tsx                   # 메인 애플리케이션 컴포넌트
+├── dummy_data/
+│   ├── carousel_images.ts    # 캐러셀 이미지 더미 데이터
+└── index.tsx                 # 엔트리 포인트
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 설치 및 실행
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### 1. 의존성 설치
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```bash
+npm install
 ```
+
+### 2. 개발 서버 실행
+
+```bash
+npm start
+```
+
+### 3. 빌드
+
+```bash
+npm run build
+```
+
+---
+
+## 사용된 기술 스택
+
+- **React**
+- **TypeScript**
+- **TailwindCSS**
+- **react-swipeable**: 스와이프 이벤트 처리 라이브러리
+- **IntersectionObserver**: 무한 스크롤 구현을 위한 브라우저 API
